@@ -1,9 +1,12 @@
 package nl.pluralsight.stagepass.service;
 
+import nl.pluralsight.stagepass.model.Booking;
 import nl.pluralsight.stagepass.model.Concert;
+import nl.pluralsight.stagepass.repository.BookingRepository;
 import nl.pluralsight.stagepass.repository.ConcertRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -12,9 +15,11 @@ import java.util.Optional;
 public class ConcertService {
 
     private final ConcertRepository concertRepository;
+    private final BookingRepository bookingRepository;
 
-    public ConcertService(ConcertRepository concertRepository) {
+    public ConcertService(ConcertRepository concertRepository, BookingRepository bookingRepository) {
         this.concertRepository = concertRepository;
+        this.bookingRepository = bookingRepository;
     }
 
     public List<Concert> getAllConcerts() {
@@ -50,6 +55,27 @@ public class ConcertService {
             existing.setTicketPrice(updatedConcert.getTicketPrice());
             return concertRepository.save(existing);
         });
+    }
+
+    public ConcertSummary getConcertSummary(Long concertId){
+        Concert concert = concertRepository.findById(concertId)
+                .orElseThrow(() -> new RuntimeException("Concert Not Found"));
+
+        List<Booking> bookings = bookingRepository.findByConcertId(concertId);
+
+        int seatsBooked = bookings.stream().mapToInt(Booking::getNumberOfTickets).sum();
+
+        BigDecimal totalRevenue = bookings.stream().map(Booking::getTotalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return new ConcertSummary(
+                concert.getId(),
+                concert.getTitle(),
+                concert.getTotalSeats(),
+                seatsBooked,
+                concert.getAvailableSeats(),
+                totalRevenue
+        );
     }
 
     public boolean deleteConcert(Long id) {

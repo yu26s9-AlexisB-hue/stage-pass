@@ -25,8 +25,14 @@ public class ConcertService {
         return concertRepository.findById(id);
     }
 
+    //adding feature 2
     public List<Concert>  getConcertsByArtist(Long artistId){
         return concertRepository.findByArtistId(artistId);
+    }
+
+    //adding feature 3
+    public List<Concert> getUpComingConcerts(){
+        return concertRepository.findByDateAfterOrderByDateAsc(LocalDate.now());
     }
 
     public Concert createConcert(Concert concert) {

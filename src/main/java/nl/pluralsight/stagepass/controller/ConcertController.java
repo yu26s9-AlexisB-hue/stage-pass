@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -34,9 +35,16 @@ public class ConcertController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    //Feature 2 added.
     @GetMapping("/artist/{artistId}")
     public ResponseEntity<List<Concert>> getConcertsByArtist(@PathVariable Long artistId){
         return ResponseEntity.ok(concertService.getConcertsByArtist(artistId));
+    }
+
+    //Feature 3 added.
+    @GetMapping("/upcoming")
+    public ResponseEntity<List<Concert>> getUpcomingConcerts(){
+        return ResponseEntity.ok(concertService.getUpComingConcerts());
     }
 
     @PostMapping

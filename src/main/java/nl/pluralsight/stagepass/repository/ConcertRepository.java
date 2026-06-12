@@ -9,5 +9,9 @@ import java.util.List;
 
 @Repository
 public interface ConcertRepository extends JpaRepository<Concert, Long> {
+    //Feature 2: searching for concert by artist ID.
     List<Concert> findByArtistId(Long artistId);
+
+    //Feature 3: Finding Upcoming concerts based on the date.
+    List<Concert> findByDateAfterOrderByDateAsc(LocalDate date);
 }

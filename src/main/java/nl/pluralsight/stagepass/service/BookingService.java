@@ -43,7 +43,7 @@ public class BookingService {
 
         // checks if the concert has any seats available
         if (booking.getNumberOfTickets() > concert.getAvailableSeats()){
-            throw new RuntimeException("Not enough seats available");
+            throw new InsufficientSeatsException("Not enough seats available");
         }
 
         //update the seats that were booked

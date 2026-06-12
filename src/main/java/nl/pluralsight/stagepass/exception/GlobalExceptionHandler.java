@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
@@ -14,5 +15,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleInsufficientSeats(InsufficientSeatsException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Map.of("message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(ConcertNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleConcertNotfound(ConcertNotFoundException ex){
+       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", ex.getMessage()));
     }
 }

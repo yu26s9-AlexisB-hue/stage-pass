@@ -1,5 +1,6 @@
 package nl.pluralsight.stagepass.service;
 
+import nl.pluralsight.stagepass.exception.ConcertNotFoundException;
 import nl.pluralsight.stagepass.model.Booking;
 import nl.pluralsight.stagepass.model.Concert;
 import nl.pluralsight.stagepass.repository.BookingRepository;
@@ -59,7 +60,7 @@ public class ConcertService {
 
     public ConcertSummary getConcertSummary(Long concertId){
         Concert concert = concertRepository.findById(concertId)
-                .orElseThrow(() -> new RuntimeException("Concert Not Found"));
+                .orElseThrow(() -> new ConcertNotFoundException("Concert Not Found"));
 
         List<Booking> bookings = bookingRepository.findByConcertId(concertId);
 

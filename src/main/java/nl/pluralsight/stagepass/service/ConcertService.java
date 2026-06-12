@@ -25,6 +25,10 @@ public class ConcertService {
         return concertRepository.findById(id);
     }
 
+    public List<Concert>  getConcertsByArtist(Long artistId){
+        return concertRepository.findByArtistId(artistId);
+    }
+
     public Concert createConcert(Concert concert) {
         return concertRepository.save(concert);
     }
